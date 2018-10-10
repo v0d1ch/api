@@ -7,14 +7,13 @@
 module Api where
 
 import Data.Proxy
-import Data.Text
-import Database.Persist
 import Models
 import Servant.API
+import Data.Int (Int64)
 
 type Api =
-  "user" :> ReqBody '[JSON] User :> Post '[JSON] (Maybe (Key User))
-  :<|> "user" :> Capture "name" Text  :> Get  '[JSON] (Maybe User)
+       "users":> Get '[JSON] [User]
+  :<|> "user" :> Capture "id" Int64 :> Get '[JSON] (Maybe User)
   :<|> Raw
 
 api :: Proxy Api

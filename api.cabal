@@ -19,14 +19,17 @@ executable api
                      , Models
   -- other-extensions:
   build-depends:       base >=4.11 && <4.12
+                     , bytestring
                      , aeson
                      , monad-logger
                      , persistent
                      , persistent-template
-                     , persistent-sqlite
+                     , persistent-postgresql
+                     , resource-pool
                      , servant
                      , servant-server
                      , string-conversions
+                     , time
                      , text
                      , transformers
                      , wai

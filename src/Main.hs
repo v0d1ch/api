@@ -3,4 +3,4 @@ module Main where
 import           App
 
 main :: IO ()
-main = run "sqlite.db"
+main = run
