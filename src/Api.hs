@@ -12,7 +12,8 @@ import Data.Text
 import Servant.API
 
 type Api =
-       "users":> Get '[JSON] [User]
+       "companies":> Get '[JSON] [Company]
+  :<|> "users":> Get '[JSON] [User]
   :<|> "user" :> Capture "name" Text :> Get '[JSON] (Maybe User)
   :<|> Raw
 
