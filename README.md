@@ -1,2 +1,2 @@
 # api
-API for the investments-info data
+API serving your financial data
