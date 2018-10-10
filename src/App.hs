@@ -7,24 +7,21 @@
 
 module App where
 
-import           Control.Monad.IO.Class (liftIO)
-import           Control.Monad.Logger (runStderrLoggingT)
-import           Database.Persist.Sqlite ( ConnectionPool, createSqlitePool
-                                         , runSqlPool, runSqlPersistMPool
-                                         , runMigration, selectFirst, (==.)
-                                         , insert, entityVal)
-import           Data.String.Conversions (cs)
-import           Data.Text (Text)
-import           Network.Wai.Handler.Warp as Warp
-
-import           Servant
-
-import           Api
-import           Models
+import Api
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad.Logger (runStderrLoggingT)
+import Data.String.Conversions (cs)
+import Data.Text (Text)
+import Database.Persist.Sqlite (ConnectionPool, createSqlitePool, entityVal, insert, runMigration,
+                                runSqlPersistMPool, runSqlPool, selectFirst, (==.))
+import Models
+import Network.Wai.Handler.Warp as Warp
+import Servant
 
 server :: ConnectionPool -> Server Api
 server pool =
-  userAddH :<|> userGetH
+  userAddH :<|>
+  userGetH :<|> serveDirectoryFileServer "static"
   where
     userAddH newUser = liftIO $ userAdd newUser
     userGetH name    = liftIO $ userGet name

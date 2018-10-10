@@ -12,7 +12,6 @@ module Models where
 
 import Data.Aeson
 import Data.Text
-
 import Database.Persist.TH
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -32,3 +31,14 @@ instance ToJSON User where
   toJSON (User name age) =
     object [ "name" .= name
            , "age" .= age ]
+
+data Welcome = Welcome Text
+
+instance FromJSON Welcome where
+  parseJSON = withObject "Welcome" $ \ v ->
+    Welcome <$> v .: "welcome"
+
+instance ToJSON Welcome where
+  toJSON (Welcome welcome) =
+    object [ "welcome" .= welcome
+           ]
