@@ -17,6 +17,7 @@ executable api
   other-modules:       App
                      , Api
                      , Models
+                     , Docs
   -- other-extensions:
   build-depends:       base >=4.11 && <4.12
                      , bytestring
@@ -28,10 +29,14 @@ executable api
                      , resource-pool
                      , servant
                      , servant-server
+                     , servant-docs
                      , string-conversions
                      , time
                      , text
                      , transformers
+                     , http-client
+                     , http-types
+                     , http-api-data
                      , wai
                      , warp
   hs-source-dirs:      src
