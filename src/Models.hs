@@ -31,4 +31,4 @@ instance FromJSON User where
 instance ToJSON User where
   toJSON (User name age) =
     object [ "name" .= name
-, "age" .= age ]
+           , "age" .= age ]

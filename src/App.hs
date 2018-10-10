@@ -54,4 +54,4 @@ mkApp sqliteFile = do
 
 run :: FilePath -> IO ()
 run sqliteFile =
-Warp.run 3000 =<< mkApp sqliteFile
+  Warp.run 3000 =<< mkApp sqliteFile
