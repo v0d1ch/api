@@ -30,7 +30,7 @@ User json sql=users
     UniqueUserEmail email
     deriving Eq Show Typeable
 
-Story
+Story json
     hashId Int
     title Text
     link Text
