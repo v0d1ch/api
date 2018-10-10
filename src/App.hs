@@ -23,18 +23,25 @@ import System.Environment
 server :: ConnectionPool -> Server Api
 server pool =
   allcompaniesGetH :<|>
+  companyGetH :<|>
   allusersGetH :<|>
   userGetH :<|>
   serveDirectoryFileServer "static"
   where
-    allcompaniesGetH = liftIO $ allcompaniesGet
-    allusersGetH     = liftIO $ allusersGet
-    userGetH name    = liftIO $ userGet name
+    allcompaniesGetH  = liftIO $ allcompaniesGet
+    companyGetH title = liftIO $ companyGet title
+    allusersGetH      = liftIO $ allusersGet
+    userGetH name     = liftIO $ userGet name
 
     allcompaniesGet :: IO [Company]
     allcompaniesGet = flip runSqlPersistMPool pool $ do
       companies <- selectList [] []
       return $ map entityVal companies
+
+    companyGet :: Text -> IO (Maybe Company)
+    companyGet title = flip runSqlPersistMPool pool $ do
+      mcompany <- selectFirst [CompanyTitle ==. title] []
+      return $ entityVal <$> mcompany
 
     allusersGet :: IO [User]
     allusersGet = flip runSqlPersistMPool pool $ do

@@ -12,9 +12,10 @@ import Data.Text
 import Servant.API
 
 type Api =
-       "companies":> Get '[JSON] [Company]
-  :<|> "users":> Get '[JSON] [User]
-  :<|> "user" :> Capture "name" Text :> Get '[JSON] (Maybe User)
+       "companies" :> Get '[JSON] [Company]
+  :<|> "company"   :> Capture "title" Text :> Get '[JSON] (Maybe Company)
+  :<|> "users"     :> Get '[JSON] [User]
+  :<|> "user"      :> Capture "name" Text :> Get '[JSON] (Maybe User)
   :<|> Raw
 
 api :: Proxy Api
