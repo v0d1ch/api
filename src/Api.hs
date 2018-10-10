@@ -8,12 +8,12 @@ module Api where
 
 import Data.Proxy
 import Models
+import Data.Text
 import Servant.API
-import Data.Int (Int64)
 
 type Api =
        "users":> Get '[JSON] [User]
-  :<|> "user" :> Capture "id" Int64 :> Get '[JSON] (Maybe User)
+  :<|> "user" :> Capture "name" Text :> Get '[JSON] (Maybe User)
   :<|> Raw
 
 api :: Proxy Api

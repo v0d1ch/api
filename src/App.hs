@@ -11,10 +11,10 @@ import Api
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runStdoutLoggingT)
 import Data.ByteString.Char8 (pack)
-import Data.Int (Int64)
 import Data.Pool (Pool)
+import Data.Text (Text)
 import Database.Persist.Postgresql (ConnectionPool, SqlBackend, createPostgresqlPool, entityVal,
-                                    runSqlPersistMPool, selectList, selectFirst, toSqlKey, (==.))
+                                    runSqlPersistMPool, selectFirst, selectList, (==.))
 import Models
 import Network.Wai.Handler.Warp as Warp
 import Servant
@@ -34,9 +34,9 @@ server pool =
       users <- selectList [] []
       return $ map entityVal users
 
-    userGet :: Int64 -> IO (Maybe User)
-    userGet uid = flip runSqlPersistMPool pool $ do
-      mUser <- selectFirst [UserId ==. toSqlKey uid] []
+    userGet :: Text -> IO (Maybe User)
+    userGet name = flip runSqlPersistMPool pool $ do
+      mUser <- selectFirst [UserName ==. Just name] []
       return $ entityVal <$> mUser
 
 app :: ConnectionPool -> Application
