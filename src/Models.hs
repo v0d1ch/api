@@ -13,9 +13,9 @@ module Models where
 
 import Data.Aeson
 import Data.Text
-import Database.Persist.TH
 import Data.Time (UTCTime)
 import Data.Typeable
+import Database.Persist.TH
 
 share [mkPersist sqlSettings] [persistLowerCase|
 User json sql=users
@@ -76,3 +76,4 @@ instance ToJSON Welcome where
   toJSON (Welcome welcome) =
     object [ "welcome" .= welcome
            ]
+

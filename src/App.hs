@@ -13,8 +13,9 @@ import Control.Monad.Logger (runStdoutLoggingT)
 import Data.ByteString.Char8 (pack)
 import Data.Pool (Pool)
 import Data.Text (Text)
+import Data.Time (UTCTime)
 import Database.Persist.Postgresql (ConnectionPool, SqlBackend, createPostgresqlPool, entityVal,
-                                    runSqlPersistMPool, selectFirst, selectList, (==.))
+                                    runSqlPersistMPool, selectFirst, selectList, (==.), (>=.), (<=.))
 import Models
 import Network.Wai.Handler.Warp as Warp
 import Servant
@@ -22,18 +23,38 @@ import System.Environment
 
 server :: ConnectionPool -> Server Api
 server pool =
-  allstoriesGetH   :<|>
-  allcompaniesGetH :<|>
-  companyGetH      :<|>
-  allusersGetH     :<|>
-  userGetH         :<|>
+  historicalRangeGetH :<|>
+  allhistoricalGetH   :<|>
+  allstoriesGetH      :<|>
+  allcompaniesGetH    :<|>
+  companyGetH         :<|>
+  allusersGetH        :<|>
+  userGetH            :<|>
   serveDirectoryFileServer "static"
   where
-    allstoriesGetH    = liftIO $ allstoriesGet
-    allcompaniesGetH  = liftIO $ allcompaniesGet
-    companyGetH title = liftIO $ companyGet title
-    allusersGetH      = liftIO $ allusersGet
-    userGetH name     = liftIO $ userGet name
+    historicalRangeGetH s e = liftIO $ historicalRangeGet s e
+    allhistoricalGetH    = liftIO $ allhistoricalGet
+    allstoriesGetH       = liftIO $ allstoriesGet
+    allcompaniesGetH     = liftIO $ allcompaniesGet
+    companyGetH title    = liftIO $ companyGet title
+    allusersGetH         = liftIO $ allusersGet
+    userGetH name        = liftIO $ userGet name
+
+    historicalRangeGet :: Maybe UTCTime -> Maybe UTCTime -> IO [Historical]
+    historicalRangeGet Nothing _ = return []
+    historicalRangeGet _ Nothing = return []
+    historicalRangeGet (Just start) (Just end) = flip runSqlPersistMPool pool $ do
+      historic <-
+        selectList
+          [HistoricalRecordDate >=. start
+          , HistoricalRecordDate <=. end
+          ] []
+      return $ map entityVal historic
+
+    allhistoricalGet :: IO [Historical]
+    allhistoricalGet = flip runSqlPersistMPool pool $ do
+      historic <- selectList [] []
+      return $ map entityVal historic
 
     allstoriesGet :: IO [Story]
     allstoriesGet = flip runSqlPersistMPool pool $ do
