@@ -15,8 +15,12 @@ import Data.Pool (Pool)
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import Database.Persist.Postgresql (ConnectionPool, SqlBackend, createPostgresqlPool, entityVal,
-                                    runSqlPersistMPool, selectFirst, selectList, (==.), (>=.), (<=.))
+                                    runSqlPersistMPool, selectFirst, selectList, (<=.), (==.),
+                                    (>=.))
+import Docs
 import Models
+import Network.HTTP.Types (ok200)
+import Network.Wai (responseLBS)
 import Network.Wai.Handler.Warp as Warp
 import Servant
 import System.Environment
@@ -30,7 +34,7 @@ server pool =
   companyGetH         :<|>
   allusersGetH        :<|>
   userGetH            :<|>
-  serveDirectoryFileServer "static"
+  Tagged serveDocs
   where
     historicalRangeGetH s e = liftIO $ historicalRangeGet s e
     allhistoricalGetH    = liftIO $ allhistoricalGet
@@ -80,6 +84,10 @@ server pool =
     userGet name = flip runSqlPersistMPool pool $ do
       mUser <- selectFirst [UserName ==. Just name] []
       return $ entityVal <$> mUser
+
+    serveDocs _ respond =
+        respond $ responseLBS ok200 [plain] docsBS
+    plain = ("Content-Type", "text/plain")
 
 app :: ConnectionPool -> Application
 app pool = serve api $ server pool

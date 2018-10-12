@@ -13,7 +13,6 @@ import Models
 import Servant.API
 
 type Api =
-  -- "http://localhost:3000/historical-range/?start=2017-10-11T21%3A12%3A13.120Z&end=2018-10-11T21%3A12%3A13.120Z
   "historical-range"
      :> QueryParam "start" UTCTime
      :> QueryParam "end" UTCTime
@@ -28,3 +27,9 @@ type Api =
 
 api :: Proxy Api
 api = Proxy
+
+type DocsAPI = Api :<|> Raw
+
+docsApi :: Proxy DocsAPI
+docsApi = Proxy
+
