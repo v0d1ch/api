@@ -59,5 +59,6 @@ ENV PATH "$PATH:/opt/stack/bin:/opt/api/bin"
 # Set the working directory as /opt/api/.
 WORKDIR /opt/api
 
+EXPOSE 3000
 CMD /opt/api/bin/api
 

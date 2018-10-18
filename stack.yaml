@@ -1,5 +1,8 @@
-resolver: lts-12.12
+resolver: lts-12.13
 
 packages:
 - .
 
+
+docker:
+ enable: true
