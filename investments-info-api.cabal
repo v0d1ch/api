@@ -1,4 +1,4 @@
-name:                api
+name:                investments-info-api
 version:             0.1.0.0
 synopsis:            Api for the investments-info data
 -- description:
@@ -41,4 +41,40 @@ executable api
                      , warp
   hs-source-dirs:      src
   ghc-options: -Wall
+  default-language:    Haskell2010
+
+test-suite test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test, src
+  other-modules:       App
+                     , Api
+                     , Models
+                     , Docs
+  main-is:             Main.hs
+  build-depends:       base
+                     , hspec
+                     , hspec-wai
+                     , hspec-wai-json
+                     , aeson
+                     , transformers
+                     , bytestring
+                     , aeson
+                     , monad-logger
+                     , persistent
+                     , persistent-template
+                     , persistent-postgresql
+                     , resource-pool
+                     , servant
+                     , servant-server
+                     , servant-docs
+                     , string-conversions
+                     , time
+                     , text
+                     , transformers
+                     , http-client
+                     , http-types
+                     , http-api-data
+                     , wai
+                     , warp
+  ghc-options:       -Wall -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010

@@ -11,10 +11,9 @@ import Api
 import Control.Monad.IO.Class (liftIO)
 import Control.Monad.Logger (runStdoutLoggingT)
 import Data.ByteString.Char8 (pack)
-import Data.Pool (Pool)
 import Data.Text (Text)
 import Data.Time (UTCTime)
-import Database.Persist.Postgresql (ConnectionPool, SqlBackend, createPostgresqlPool, entityVal,
+import Database.Persist.Postgresql (ConnectionPool, createPostgresqlPool, entityVal,
                                     runSqlPersistMPool, selectFirst, selectList, (<=.), (==.),
                                     (>=.))
 import Docs
@@ -95,7 +94,7 @@ app pool = serve api $ server pool
 mkApp :: IO Application
 mkApp = do
   db    <- getEnv "iiservant"
-  pool  <- runStdoutLoggingT $ createPostgresqlPool (pack db) 10 :: IO (Pool SqlBackend)
+  pool  <- runStdoutLoggingT $ createPostgresqlPool (pack db) 10
   return $ app pool
 
 run :: IO ()
