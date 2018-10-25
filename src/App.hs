@@ -98,4 +98,4 @@ mkApp = do
   return $ app pool
 
 run :: IO ()
-run = Warp.run 3000 =<< mkApp
+run = Warp.run 4000 =<< mkApp
