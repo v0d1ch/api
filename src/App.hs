@@ -21,6 +21,7 @@ import Models
 import Network.HTTP.Types (ok200)
 import Network.Wai (responseLBS)
 import Network.Wai.Handler.Warp as Warp
+import Network.Wai.Handler.WarpTLS
 import Servant
 import System.Environment
 
@@ -97,5 +98,18 @@ mkApp = do
   pool  <- runStdoutLoggingT $ createPostgresqlPool (pack db) 10
   return $ app pool
 
+tlsS :: TLSSettings
+tlsS =
+  tlsSettings
+    "/etc/letsencrypt/live/investments-info.com/fullchain.pem"
+    "/etc/letsencrypt/live/investments-info.com/privkey.pem"
+
 run :: IO ()
-run = Warp.run 4000 =<< mkApp
+run =
+  runTLS tlsS warpS =<< mkApp
+  where
+    warpS = setPort 4000 defaultSettings
+
+-- run :: IO ()
+-- run = Warp.run 4000 =<< mkApp
+
