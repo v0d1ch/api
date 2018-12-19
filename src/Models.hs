@@ -11,7 +11,6 @@
 
 module Models where
 
-import Data.Aeson
 import Data.Text
 import Data.Time (UTCTime)
 import Data.Typeable
@@ -65,15 +64,4 @@ Historical json
     deriving Eq
     deriving Show
 |]
-
-data Welcome = Welcome Text
-
-instance FromJSON Welcome where
-  parseJSON = withObject "Welcome" $ \ v ->
-    Welcome <$> v .: "welcome"
-
-instance ToJSON Welcome where
-  toJSON (Welcome welcome) =
-    object [ "welcome" .= welcome
-           ]
 
